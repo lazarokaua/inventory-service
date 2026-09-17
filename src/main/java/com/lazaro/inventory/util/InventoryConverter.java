@@ -1,7 +1,6 @@
 package com.lazaro.inventory.util;
 
 
-import java.util.Optional;
 
 import com.lazaro.inventory.inventory.Inventory;
 import com.lazaro.inventory.inventory.InventoryDTO;
@@ -28,9 +27,6 @@ public class InventoryConverter {
     return inventoryDTO;
   }
 
-  public static InventoryDTO convert(Optional<Inventory> byId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'convert'");
-  }
+ 
 
 }
