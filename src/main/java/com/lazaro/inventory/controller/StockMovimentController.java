@@ -36,9 +36,6 @@ public class StockMovimentController {
         .toUri();
 
         return ResponseEntity.created(location).body(sMovimentDTO);
-
-
-
     }
 
 }
