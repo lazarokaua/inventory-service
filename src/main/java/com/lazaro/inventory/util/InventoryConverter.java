@@ -10,21 +10,23 @@ public class InventoryConverter {
   public static Inventory convert(InventoryDTO inventoryDTO) {
     Inventory inventory = new Inventory();
 
-    inventory.setQuantity(inventoryDTO.quantity());
-    inventory.setLocationId(inventoryDTO.locationId());
+    inventory.setId(inventoryDTO.id());
     inventory.setProductId(inventoryDTO.productId());
+    inventory.setLocationId(inventoryDTO.locationId());
+    inventory.setQuantity(inventoryDTO.quantity());
+    inventory.setReservedQuantity(inventoryDTO.reservedQuantity() != null ? inventoryDTO.reservedQuantity() : 0);
 
     return inventory;
   }
   
   public static InventoryDTO convert(Inventory inventory) {
-    InventoryDTO inventoryDTO = new InventoryDTO(
+    return new InventoryDTO(
+      inventory.getId(),
       inventory.getProductId(),
       inventory.getLocationId(),
-      inventory.getQuantity()
+      inventory.getQuantity(),
+      inventory.getReservedQuantity()
     );
-
-    return inventoryDTO;
   }
 
  

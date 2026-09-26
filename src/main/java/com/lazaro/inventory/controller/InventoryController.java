@@ -4,6 +4,7 @@ import com.lazaro.inventory.business.InventoryBusiness;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,8 +35,8 @@ public class InventoryController {
         InventoryDTO createdDto = inventoryBusiness.create(inventoryDTO);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{productId}")
-        .buildAndExpand(createdDto.productId())
+        .path("/{id}")
+        .buildAndExpand(createdDto.id())
         .toUri();
 
         return ResponseEntity.created(location).body(createdDto);
@@ -43,11 +44,16 @@ public class InventoryController {
     }
 
     @GetMapping("/{id}")
-    public  ResponseEntity<InventoryDTO> getById(@PathVariable Long id){
+    public ResponseEntity<InventoryDTO> getById(@PathVariable Long id){
         InventoryDTO inventoryDTO = inventoryBusiness.findById(id);
 
         return ResponseEntity.ok(inventoryDTO);
-        
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<List<InventoryDTO>> getByProductId(@PathVariable UUID productId) {
+        List<InventoryDTO> list = inventoryBusiness.findByProductId(productId);
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping

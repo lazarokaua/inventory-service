@@ -1,6 +1,6 @@
 package com.lazaro.inventory.moviment;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -10,6 +10,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,6 +22,7 @@ import lombok.NoArgsConstructor;
  */
 
 @Entity 
+@Table(name = "stock_moviment")
 @Data 
 @NoArgsConstructor 
 @AllArgsConstructor 
@@ -28,21 +31,36 @@ public class StockMoviment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMoviment;
-    @Column 
+
+    @Column(nullable = false)
     private UUID productId;
-    @Column 
+
+    @Column(nullable = false)
     private UUID locationId;
-    @Column 
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MovimentType movimentType;
-    @Column 
+
+    @Column(nullable = false)
     private Integer quantity;
-    @Column 
+
+    @Column(nullable = false)
     private Integer previousQuantity;
-    @Column 
+
+    @Column(nullable = false)
     private Integer newQuantity;
-    @Column 
+
+    @Column(nullable = false)
     private String reason;
-    @Column 
-    private LocalDate createdAt;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
 }

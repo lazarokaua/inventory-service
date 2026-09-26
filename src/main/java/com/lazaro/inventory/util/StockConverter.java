@@ -5,28 +5,34 @@ import com.lazaro.inventory.moviment.StockMovimentDTO;
 
 public class StockConverter {
 
-  public static StockMoviment convert(StockMovimentDTO stockMovimentDTO) {
-    StockMoviment stockMoviment = new StockMoviment();
+  public static StockMoviment convert(StockMovimentDTO dto) {
+    StockMoviment moviment = new StockMoviment();
+    
+    moviment.setIdMoviment(dto.idMoviment());
+    moviment.setProductId(dto.productId());
+    moviment.setLocationId(dto.locationId());
+    moviment.setMovimentType(dto.movimentType());
+    moviment.setQuantity(dto.quantity());
+    moviment.setReason(dto.reason());
+    moviment.setPreviousQuantity(dto.previousQuantity());
+    moviment.setNewQuantity(dto.newQuantity());
+    moviment.setCreatedAt(dto.createdAt());
 
-    stockMoviment.setQuantity(stockMovimentDTO.quantity());
-    stockMoviment.setLocationId(stockMovimentDTO.locationId());
-    stockMoviment.setProductId(stockMovimentDTO.productId());
-
-    return stockMoviment;
+    return moviment;
   }
   
-
- public static StockMovimentDTO convert(StockMoviment stockMoviment) {
-    StockMovimentDTO stockMovimentDTO = new StockMovimentDTO(
+  public static StockMovimentDTO convert(StockMoviment stockMoviment) {
+    return new StockMovimentDTO(
       stockMoviment.getIdMoviment(),
       stockMoviment.getProductId(),
       stockMoviment.getLocationId(),
       stockMoviment.getMovimentType(),
       stockMoviment.getQuantity(),
-      stockMoviment.getReason()
+      stockMoviment.getReason(),
+      stockMoviment.getPreviousQuantity(),
+      stockMoviment.getNewQuantity(),
+      stockMoviment.getCreatedAt()
     );
-
-    return stockMovimentDTO;
   }
 
 }

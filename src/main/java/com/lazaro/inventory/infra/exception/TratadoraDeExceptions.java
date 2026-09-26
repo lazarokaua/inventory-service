@@ -10,15 +10,17 @@ import jakarta.persistence.EntityNotFoundException;
 
 
 @RestControllerAdvice 
+
+
 public class TratadoraDeExceptions {
 
-    @ExceptionHandler(com.lazaro.inventory.ExceptionError.class)
-    public ResponseEntity<String> tratandoErroRegraDeNegocio(com.lazaro.inventory.ExceptionError ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<DadosErroMensagem> tratandoErroRegraDeNegocio(BusinessException ex) {
+        return ResponseEntity.badRequest().body(new DadosErroMensagem(ex.getMessage()));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity trantandoErroNaoEncontrado() {
+    public ResponseEntity<Void> tratandoErroNaoEncontrado() {
         return ResponseEntity.notFound().build();
     }
 
@@ -28,9 +30,10 @@ public class TratadoraDeExceptions {
 
         return ResponseEntity.badRequest().body(erros.stream().map(DadosErroValidacao::new).toList());
 
-
     }
 
+
+    public record DadosErroMensagem(String message) {}
 
     private record DadosErroValidacao(String campo, String message) {
         public DadosErroValidacao(FieldError erro) {
