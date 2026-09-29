@@ -38,6 +38,9 @@ public class StockMoviment {
     @Column(nullable = false)
     private UUID locationId;
 
+    @Column
+    private UUID destinationLocationId;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MovimentType movimentType;

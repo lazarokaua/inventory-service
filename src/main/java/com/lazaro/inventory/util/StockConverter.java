@@ -11,6 +11,7 @@ public class StockConverter {
     moviment.setIdMoviment(dto.idMoviment());
     moviment.setProductId(dto.productId());
     moviment.setLocationId(dto.locationId());
+    moviment.setDestinationLocationId(dto.destinationLocationId());
     moviment.setMovimentType(dto.movimentType());
     moviment.setQuantity(dto.quantity());
     moviment.setReason(dto.reason());
@@ -26,6 +27,7 @@ public class StockConverter {
       stockMoviment.getIdMoviment(),
       stockMoviment.getProductId(),
       stockMoviment.getLocationId(),
+      stockMoviment.getDestinationLocationId(),
       stockMoviment.getMovimentType(),
       stockMoviment.getQuantity(),
       stockMoviment.getReason(),

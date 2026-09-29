@@ -54,7 +54,43 @@ public class StockBusiness {
                 newQuantity = previousQuantity - stockMovimentDTO.quantity();
             }
             case ADJUSTMENT -> newQuantity = stockMovimentDTO.quantity();
-            case TRANSFER -> throw new BusinessException("A movimentação TRANSFER exige fluxo de transferência entre localizações.");
+            case TRANSFER -> {
+              if (stockMovimentDTO.destinationLocationId() == null) {
+                throw new BusinessException("Localização de destino é obrigatória para movimentações do tipo TRANSFER.");
+              }
+
+
+              if (stockMovimentDTO.destinationLocationId().equals(stockMovimentDTO.locationId())) {
+                throw new BusinessException("A localização de destino não pode ser igual à localização de origem.");
+              }
+              if (availableQuantity < stockMovimentDTO.quantity()) {
+                throw new BusinessException("Saldo disponível insuficiente na localização de origem. Disponível: "
+                        + availableQuantity + ", Solicitado: " + stockMovimentDTO.quantity());
+              }
+
+
+              newQuantity = previousQuantity - stockMovimentDTO.quantity();
+
+              Inventory destinationInventory = inventoryRepository
+                      .findByProductIdAndLocationId(stockMovimentDTO.productId(), stockMovimentDTO.destinationLocationId())
+                      .orElseGet(() -> {
+                        Inventory created = new Inventory();
+                        created.setProductId(stockMovimentDTO.productId());
+                        created.setLocationId(stockMovimentDTO.destinationLocationId());
+                        created.setQuantity(0);
+                        created.setReservedQuantity(0);
+                        return created;
+                      });
+              destinationInventory.setQuantity(destinationInventory.getQuantity() + stockMovimentDTO.quantity());
+              inventoryRepository.save(destinationInventory);
+            }
+
+
+
+
+
+
+
             default -> throw new BusinessException("Tipo de movimentação não suportado: " + stockMovimentDTO.movimentType());
         }
 
@@ -64,6 +100,7 @@ public class StockBusiness {
         StockMoviment moviment = StockConverter.convert(stockMovimentDTO);
         moviment.setPreviousQuantity(previousQuantity);
         moviment.setNewQuantity(newQuantity);
+        
 
         StockMoviment savedMoviment = stockMovimentRepository.save(moviment);
         return StockConverter.convert(savedMoviment);
