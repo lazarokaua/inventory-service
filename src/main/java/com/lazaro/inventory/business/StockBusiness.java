@@ -87,10 +87,6 @@ public class StockBusiness {
 
 
 
-
-
-
-
             default -> throw new BusinessException("Tipo de movimentação não suportado: " + stockMovimentDTO.movimentType());
         }
 
